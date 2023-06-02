@@ -65,10 +65,22 @@ public class TextPlayHandler extends GameEngine {
         int dy = 0;
 
         switch (direction) {
-            case "UP", "KP_UP", "up", "w" -> dy = -1;
-            case "DOWN", "KP_DOWN", "down", "s" -> dy = 1;
-            case "LEFT", "KP_LEFT", "left", "a" -> dx = -1;
-            case "RIGHT", "KP_RIGHT", "right", "d" -> dx = 1;
+            case "UP", "KP_UP", "up", "w" -> {
+                dy = -1;
+                movementCount++;
+            }
+            case "DOWN", "KP_DOWN", "down", "s" -> {
+                dy = 1;
+                movementCount++;
+            }
+            case "LEFT", "KP_LEFT", "left", "a" -> {
+                dx = -1;
+                movementCount++;
+            }
+            case "RIGHT", "KP_RIGHT", "right", "d" -> {
+                dx = 1;
+                movementCount++;
+            }
             case "eggs", "egg" -> System.out.println("Collected Eggs: " + collectedEggs);
             case "keys", "key" -> System.out.println("Collected Keys: " + collectedKeys);
             case "steps", "moves", "step" -> System.out.println("Movement Count: " + movementCount);
@@ -125,7 +137,7 @@ public class TextPlayHandler extends GameEngine {
 
             grid[playerY][playerX].setValue('P');
 
-            movementCount++;
+//            movementCount++;
             movementCounterText.setText("Steps Taken: " + movementCount + "/" + MAX_STEPS);
 
 

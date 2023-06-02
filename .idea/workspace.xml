@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="58eeba36-2ca5-4517-a6ca-9bff03bd9725" name="Changes" comment="Egg hunt game">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/GameEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/GameEngine.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/SerializableRectangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/SerializableRectangle.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/TextPlayHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/TextPlayHandler.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -134,7 +132,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685667683124</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Egg hunt game">
+      <created>1685679002040</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1685679002040</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
