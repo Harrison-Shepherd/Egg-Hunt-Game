@@ -166,7 +166,7 @@ public class GameGUI extends GameEngine {
 
         primaryStage.show();
 
-    } // TODO double check overlapping tiles (eggs keys locks)
+    }
 
     // All data saved into "1.save" to be loaded.
     public void saveData (String fileName){
@@ -277,7 +277,7 @@ public class GameGUI extends GameEngine {
             do {
                 x = (int) (Math.random() * MAP_SIZE);
                 y = (int) (Math.random() * MAP_SIZE);
-            } while (keyLocations[y][x] || lockedCells[y][x] || eggLocations[y][x]);
+            } while (keyLocations[y][x] || lockedCells[y][x] || eggLocations[y][x] || (x == playerX && y == playerY));
 
             keyLocations[y][x] = true;
         }
@@ -289,7 +289,7 @@ public class GameGUI extends GameEngine {
             do {
                 x = (int) (Math.random() * MAP_SIZE);
                 y = (int) (Math.random() * MAP_SIZE);
-            } while (keyLocations[y][x] || lockedCells[y][x] || eggLocations[y][x]);
+            } while (keyLocations[y][x] || lockedCells[y][x] || eggLocations[y][x] || (x == playerX && y == playerY));
 
             lockedCells[y][x] = true;
         }
@@ -301,11 +301,12 @@ public class GameGUI extends GameEngine {
             do {
                 x = (int) (Math.random() * MAP_SIZE);
                 y = (int) (Math.random() * MAP_SIZE);
-            } while (keyLocations[y][x] || lockedCells[y][x] || eggLocations[y][x]);
+            } while (keyLocations[y][x] || lockedCells[y][x] || eggLocations[y][x] || (x == playerX && y == playerY));
 
             eggLocations[y][x] = true;
         }
     }
+
 
     static class GuiPlayHandler {
         private final int d;
