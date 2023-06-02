@@ -7,14 +7,11 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,8 +19,8 @@ import java.util.Optional;
 public class GameGUI extends GameEngine {
     private final int d;
     private Image keyImage;
-    private Image lockImage;
     private Image eggImage;
+    private Image lockImage;
 
     public GameGUI(int d) {
         super();
@@ -55,7 +52,6 @@ public class GameGUI extends GameEngine {
         stage.show(); // Add this line to display the stage with the scene
     }
 
-
     public void constructGui(Stage primaryStage) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-padding: 20");
@@ -63,11 +59,11 @@ public class GameGUI extends GameEngine {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
 
-        grid = new Rectangle[MAP_SIZE][MAP_SIZE];
+        grid = new SerializableRectangle[MAP_SIZE][MAP_SIZE];
         keyLocations = new boolean[MAP_SIZE][MAP_SIZE];
         lockedCells = new boolean[MAP_SIZE][MAP_SIZE];
         eggLocations = new boolean[MAP_SIZE][MAP_SIZE];
-        openedChests = new HashSet<>();
+        openedLocks = new HashSet<>();
         collectedKeys = 0;
         collectedEggs = 0;
         movementCount = 0;
@@ -75,14 +71,14 @@ public class GameGUI extends GameEngine {
         initializeGame(d);
 
         // Load the PNG images
-        this.keyImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/key_icon.png")));
-        this.lockImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/lock_icon.png")));
-        this.eggImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/egg_icon.png")));
+        keyImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/key_icon.png")));
+        lockImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/lock_icon.png")));
+        eggImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/egg_icon.png")));
         playerImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/player_icon.png")));
 
         for (int y = 0; y < MAP_SIZE; y++) {
             for (int x = 0; x < MAP_SIZE; x++) {
-                Rectangle tile = new Rectangle(TILE_SIZE, TILE_SIZE);
+                SerializableRectangle tile = new SerializableRectangle(TILE_SIZE, TILE_SIZE);
                 tile.setStroke(Color.BLACK);
 
                 if (keyLocations[y][x]) {
@@ -155,61 +151,120 @@ public class GameGUI extends GameEngine {
         root.setLeft(arrowButtonsGrid);
 
 
-
-
-
-
-
-
         // Create the save and load buttons
-        Button saveButton = new Button("Save");
-        //saveButton.setOnAction(event -> saveGame("game_state.dat"));
-        saveButton.setFocusTraversable(false);
+        Button save_Button = new Button("SAVE");
+        save_Button.setOnAction(event -> saveData("1.save"));
+        save_Button.setFocusTraversable(false);
 
-        Button loadButton = new Button("Load");
-//        loadButton.setOnAction(event -> {
-//            GameEngine loadedGame = loadGame("game_state.dat");
-//            if (loadedGame != null) {
-//                // Update the current game state with the loaded game state
-//                this.playerX = loadedGame.playerX;
-//                this.playerY = loadedGame.playerY;
-//                this.keyLocations = loadedGame.keyLocations;
-//                this.lockedCells = loadedGame.lockedCells;
-//                this.eggLocations = loadedGame.eggLocations;
-//                this.gameWon = loadedGame.gameWon;
-//                this.openedChests = loadedGame.openedChests;
-//                this.collectedKeys = loadedGame.collectedKeys;
-//                this.collectedEggs = loadedGame.collectedEggs;
-//                this.movementCount = loadedGame.movementCount;
-//                this.grid = loadedGame.grid;
-//
-//                // Update the GUI with the loaded game state
-//                updateGUI();
-//                System.out.println("Game loaded successfully!");
-//            } else {
-//                System.out.println("Failed to load game!");
-//            }
-//        });
-        loadButton.setFocusTraversable(false);
+        Button load_Button = new Button("Load");
+        load_Button.setOnAction(event -> loadData("1.save"));
+        load_Button.setFocusTraversable(false);
 
         // Add the save and load buttons to the GUI
-        VBox buttonsBox = new VBox(10, saveButton, loadButton);
+        VBox buttonsBox = new VBox(10, save_Button, load_Button);
         buttonsBox.setAlignment(Pos.CENTER);
         root.setRight(buttonsBox);
 
+
         primaryStage.show();
+
+
+
     }
 
+    public void saveData (String fileName){
+        try {
+            GameEngine data = new GameEngine();
+            data.playerX = playerX;
+            data.playerY = playerY;
+            data.keyLocations = keyLocations;
+            data.lockedCells = lockedCells;
+            data.eggLocations = eggLocations;
+            data.openedLocks = openedLocks;
+            data.collectedKeys = collectedKeys;
+            data.collectedEggs = collectedEggs;
+            data.movementCount = movementCount;
+            data.grid = grid;
+            data.keyLocations[newY][newX] = keyLocations[newY][newX];
+            data.grid[newY][newX] = grid[newY][newX];
+            data.lockedCells[newY][newX] = lockedCells[newY][newX];
+            data.eggLocations[newY][newX] = eggLocations[newY][newX];
+            data.grid[playerY][playerX] = grid[playerY][playerX];
+            data.grid[playerY][playerX].setFill(new ImagePattern(playerImage));
+            data.gameWon = gameWon;
+            data.movementCounterTextData = movementCounterText.getText(); // Store the text value
+            data.scoreTextData = scoreText.getText(); // Store the text value
 
+            ResourceManager.save(data, fileName);
+        } catch (Exception e) {
+            System.out.println("Couldn't save: " + e.getMessage());
+        }
+    }
 
+    public void loadData(String fileName) {
+        try {
+            GameEngine loadedData = (GameEngine) ResourceManager.load(fileName);
+            playerX = loadedData.playerX;
+            playerY = loadedData.playerY;
+            keyLocations = loadedData.keyLocations;
+            lockedCells = loadedData.lockedCells;
+            eggLocations = loadedData.eggLocations;
+            openedLocks = loadedData.openedLocks;
+            collectedKeys = loadedData.collectedKeys;
+            collectedEggs = loadedData.collectedEggs;
+            movementCount = loadedData.movementCount;
+            gameWon = loadedData.gameWon;
+            // Recreate the Text objects using the stored data
+            movementCounterText.setText(loadedData.movementCounterTextData);
+            scoreText.setText(loadedData.scoreTextData);
 
+            for (int y = 0; y < MAP_SIZE; y++) {
+                for (int x = 0; x < MAP_SIZE; x++) {
+                    grid[y][x].setFill(Color.WHITE); // Clear the grid
+                }
+            }
 
+            // Set the fill for key locations
+            for (int y = 0; y < MAP_SIZE; y++) {
+                for (int x = 0; x < MAP_SIZE; x++) {
+                    if (keyLocations[y][x]) {
+                        grid[y][x].setFill(new ImagePattern(keyImage));
+                    }
+                }
+            }
+
+            // Set the fill for locked cells
+            for (int y = 0; y < MAP_SIZE; y++) {
+                for (int x = 0; x < MAP_SIZE; x++) {
+                    if (lockedCells[y][x]) {
+                        grid[y][x].setFill(new ImagePattern(lockImage));
+                    }
+                }
+            }
+
+            // Set the fill for egg locations
+            for (int y = 0; y < MAP_SIZE; y++) {
+                for (int x = 0; x < MAP_SIZE; x++) {
+                    if (eggLocations[y][x]) {
+                        grid[y][x].setFill(new ImagePattern(eggImage));
+                    }
+                }
+            }
+
+            // Set the fill for the player's tile
+            grid[playerY][playerX].setFill(new ImagePattern(playerImage));
+
+            refreshGrid();
+        } catch (Exception e) {
+            System.out.println("Couldn't load save data: " + e.getMessage());
+        }
+    }
 
 
     public void initializeGame(int d) {
         playerX = 0;
         playerY = MAP_SIZE - 1;
-        openedChests.clear();
+        openedLocks.clear();
         collectedKeys = 0;
         collectedEggs = 0;
         gameWon = false;
@@ -283,7 +338,6 @@ public class GameGUI extends GameEngine {
         }
     }
 
-
     static class InputValidator {
 
         public static boolean isValidInput(String input) {
@@ -311,7 +365,6 @@ public class GameGUI extends GameEngine {
             alert.showAndWait();
         }
     }
-
 
     static class help {
 
@@ -343,46 +396,37 @@ public class GameGUI extends GameEngine {
         return button;
     }
 
-//    private void updateGUI() {
-//        // Update the GUI components with the loaded game state
-//        keyCounterText.setText("Key Count: " + collectedKeys);
-//        eggCounterText.setText("Egg Count: " + collectedEggs);
-//        movementCounterText.setText("Steps Taken: " + movementCount);
-//
-//        for (int i = 0; i < MAP_SIZE; i++) {
-//            for (int j = 0; j < MAP_SIZE; j++) {
-//                // Update the grid cells based on the loaded game state
-//                boolean isPlayer = (i == playerY && j == playerX);
-//                boolean isKey = keyLocations[i][j];
-//                boolean isLocked = lockedCells[i][j];
-//                boolean isEgg = eggLocations[i][j];
-//
-//                Rectangle rect = grid[i][j];
-//
-//                if (isPlayer) {
-//                    rect.setFill(new ImagePattern(playerImage));
-//                } else if (isKey) {
-//                    rect.setFill(new ImagePattern(keyImage));
-//                } else if (isLocked) {
-//                    rect.setFill(new ImagePattern(lockImage));
-//                } else if (isEgg) {
-//                    rect.setFill(new ImagePattern(eggImage));
-//                } else {
-//                    rect.setFill(Color.WHITE);
-//                }
-//            }
-//        }
-//
-//        // Check if the game is won and update the message label accordingly
-//        if (gameWon) {
-//            scoreText.setText("Congratulations! You won the game!");
-//        } else {
-//            scoreText.setText("Use arrow keys to move. Collect all keys and eggs.");
-//        }
-//    }
+    public void refreshGrid() {
+        for (int y = 0; y < MAP_SIZE; y++) {
+            for (int x = 0; x < MAP_SIZE; x++) {
+                SerializableRectangle tile = grid[y][x];
+                if (keyLocations[y][x]) {
+                    tile.setFill(new ImagePattern(keyImage));
+                } else if (lockedCells[y][x]) {
+                    tile.setFill(new ImagePattern(lockImage));
+                } else if (eggLocations[y][x]) {
+                    tile.setFill(new ImagePattern(eggImage));
+//                } else if (newX == x && newY == y) {
+//                    tile.setFill(new ImagePattern(playerImage));
+                } else {
+                    tile.setFill(Color.WHITE);
+                }
 
 
 
+
+            }
+        }
+
+        grid[playerY][playerX].setFill(new ImagePattern(playerImage));
+        keyCounterText.setText("Key Count: " + collectedKeys);
+        eggCounterText.setText("Egg Count: " + collectedEggs);
+        movementCounterText.setText("Steps Taken: " + movementCount);
+
+        if (gameWon) {
+            scoreText.setText("Congratulations! You won the game!");
+        }
+    }
 
 
 

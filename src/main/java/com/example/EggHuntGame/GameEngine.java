@@ -3,16 +3,14 @@ package com.example.EggHuntGame;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
-
 import javafx.scene.text.Text;
-
 import java.io.*;
 import java.util.Set;
 
-public class GameEngine implements Serializable {
+public class GameEngine implements java.io.Serializable {
 
-
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     protected static final int TILE_SIZE = 40;
     protected static final int MAP_SIZE = 10;
@@ -26,7 +24,7 @@ public class GameEngine implements Serializable {
     protected boolean[][] lockedCells;
     protected boolean[][] eggLocations;
     protected boolean gameWon;
-    protected Set<Integer> openedChests;
+    protected Set<Integer> openedLocks;
     protected int collectedKeys;
     protected int collectedEggs;
     protected int movementCount;
@@ -34,13 +32,15 @@ public class GameEngine implements Serializable {
     protected Text keyCounterText;
     protected Text eggCounterText;
     protected Text scoreText;
-    protected Rectangle[][] grid;
+    protected SerializableRectangle[][] grid;
+
     protected Image playerImage;
 
-    protected int d;
+    protected int newX;
+    protected int newY;
 
-
-
+    protected String movementCounterTextData;
+    protected String scoreTextData;
 
 
 
@@ -64,8 +64,8 @@ public class GameEngine implements Serializable {
             }
         }
 
-        int newX = playerX + dx;
-        int newY = playerY + dy;
+        newX = playerX + dx;
+        newY = playerY + dy;
 
         if (isValidMove(newX, newY)) {
             if (keyLocations[newY][newX]) {
@@ -75,10 +75,10 @@ public class GameEngine implements Serializable {
                 keyCounterText.setText("Key Count: " + collectedKeys);
             }
 
-            if (lockedCells[newY][newX] && !openedChests.contains(newY * MAP_SIZE + newX)) {
+            if (lockedCells[newY][newX] && !openedLocks.contains(newY * MAP_SIZE + newX)) {
                 if (collectedKeys > 0) {
                     collectedKeys--;
-                    openedChests.add(newY * MAP_SIZE + newX);
+                    openedLocks.add(newY * MAP_SIZE + newX);
                     grid[newY][newX].setFill(Color.WHITE);
                     keyCounterText.setText("Key Count: " + collectedKeys);
                 } else {
