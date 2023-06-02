@@ -29,7 +29,7 @@ public class TextPlayHandler extends GameEngine {
             System.out.print("Enter your move (w/a/s/d): ");
 
             String input = scanner.nextLine().toLowerCase();
-            System.out.println("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n ");
+            System.out.println("\n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n \n "); // provides space in between map generations for clarity.
             if (input.isEmpty()) {
                 continue;
             }
@@ -56,7 +56,7 @@ public class TextPlayHandler extends GameEngine {
     }
 
 
-    protected void TextInputHandle(String direction) {
+    protected void TextInputHandle(String input) {
         if (gameWon || movementCount >= MAX_STEPS) {
             return;
         }
@@ -64,7 +64,7 @@ public class TextPlayHandler extends GameEngine {
         int dx = 0;
         int dy = 0;
 
-        switch (direction) {
+        switch (input) {
             case "UP", "KP_UP", "up", "w" -> {
                 dy = -1;
                 movementCount++;
@@ -90,7 +90,10 @@ public class TextPlayHandler extends GameEngine {
                      To see how many steps you have taken, type 'steps' or 'moves' or 'step'. Total number of steps you can take is 100.\s
                      Have fun!""");
             case "save" -> saveTextData("1.save");
-            case "load" -> loadTextData("1.save");
+            case "load" -> {
+                loadTextData("1.save");
+                System.out.println("You currently have "+collectedKeys+" keys and "+collectedEggs+" eggs and have moved "+movementCount+" steps.");
+            }
             default -> {
                 // Ignore other key events
                 return;
@@ -282,6 +285,7 @@ public class TextPlayHandler extends GameEngine {
         });
     }
 
+    // saves current game data
     public void saveTextData(String fileName) {
         try {
             TextGameData data = new TextGameData();
@@ -304,6 +308,7 @@ public class TextPlayHandler extends GameEngine {
         }
     }
 
+    // overrides current game data with saved data
     public void loadTextData(String fileName) {
         try {
             TextGameData loadedData = (TextGameData) ResourceManager.load(fileName);
@@ -322,14 +327,14 @@ public class TextPlayHandler extends GameEngine {
 
             for (int y = 0; y < MAP_SIZE; y++) {
                 for (int x = 0; x < MAP_SIZE; x++) {
-                    grid[y][x].setText("");
+                    grid[y][x].setText(""); // Reloads empty tiles from save file into grid
                 }
             }
 
             for (int y = 0; y < MAP_SIZE; y++) {
                 for (int x = 0; x < MAP_SIZE; x++) {
                     if (keyLocations[y][x]) {
-                        grid[y][x].setText("K");
+                        grid[y][x].setText("K"); // Reloads keys from save file into grid
                     }
                 }
             }
@@ -337,7 +342,7 @@ public class TextPlayHandler extends GameEngine {
             for (int y = 0; y < MAP_SIZE; y++) {
                 for (int x = 0; x < MAP_SIZE; x++) {
                     if (lockedCells[y][x]) {
-                        grid[y][x].setText("L");
+                        grid[y][x].setText("L"); // Reloads locks from save file into grid
                     }
                 }
             }
@@ -345,21 +350,18 @@ public class TextPlayHandler extends GameEngine {
             for (int y = 0; y < MAP_SIZE; y++) {
                 for (int x = 0; x < MAP_SIZE; x++) {
                     if (eggLocations[y][x]) {
-                        grid[y][x].setText("E");
+                        grid[y][x].setText("E"); // Reloads eggs from save file into grid
                     }
                 }
             }
 
-            grid[playerY][playerX].setText("P");
-
-            // Refresh the grid to update the displayed text
-            //refreshGrid();
+            grid[playerY][playerX].setText("P"); // Resets the display of player position after loading.
         } catch (Exception e) {
             System.out.println("Couldn't load save data: " + e.getMessage());
         }
     }
 
-    private static class TextGameData implements Serializable {
+    private static class TextGameData implements Serializable { // Text game data variables to execute the SaveTextData and LoadTextData methods.
         int playerX;
         int playerY;
         boolean[][] keyLocations;
