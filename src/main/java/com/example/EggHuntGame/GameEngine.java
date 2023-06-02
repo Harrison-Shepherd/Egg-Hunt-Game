@@ -50,10 +50,10 @@ public class GameEngine implements java.io.Serializable {
         int dy = 0;
 
         switch (direction) {
-            case "UP", "KP_UP" -> dy = -1;
-            case "DOWN", "KP_DOWN" -> dy = 1;
-            case "LEFT", "KP_LEFT" -> dx = -1;
-            case "RIGHT", "KP_RIGHT" -> dx = 1;
+            case "UP", "KP_UP", "up", "w" -> dy = -1;
+            case "DOWN", "KP_DOWN", "down", "s" -> dy = 1;
+            case "LEFT", "KP_LEFT", "left", "a" -> dx = -1;
+            case "RIGHT", "KP_RIGHT", "right", "d" -> dx = 1;
             default -> {
                 // Ignore other key events
                 return;
@@ -118,7 +118,7 @@ public class GameEngine implements java.io.Serializable {
         }
     }
 
-    private boolean isValidMove(int x, int y) {
+    protected boolean isValidMove(int x, int y) {
         return x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE;
     }
 
