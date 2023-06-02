@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="58eeba36-2ca5-4517-a6ca-9bff03bd9725" name="Changes" comment="a">
-      <change afterPath="$PROJECT_DIR$/1.save" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/SerializableRectangle.java" afterDir="false" />
+    <list default="true" id="58eeba36-2ca5-4517-a6ca-9bff03bd9725" name="Changes" comment="Egg hunt game">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/1.save" beforeDir="false" afterPath="$PROJECT_DIR$/1.save" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/GameEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/GameEngine.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/GameGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/GameGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/ResourceManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/ResourceManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/SaveData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/RunGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/RunGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/SerializableRectangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/EggHuntGame/SerializableRectangle.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -124,12 +123,20 @@
       <option name="project" value="LOCAL" />
       <updated>1685609474087</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Egg hunt game">
+      <created>1685666098296</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1685666098296</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="a" />
-    <option name="LAST_COMMIT_MESSAGE" value="a" />
+    <MESSAGE value="Egg hunt game" />
+    <option name="LAST_COMMIT_MESSAGE" value="Egg hunt game" />
   </component>
 </project>

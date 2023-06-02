@@ -9,15 +9,14 @@ import java.util.Set;
 
 public class GameEngine implements java.io.Serializable {
 
+    // Game Variables
     @Serial
     private static final long serialVersionUID = 1L;
-
     protected static final int TILE_SIZE = 40;
     protected static final int MAP_SIZE = 10;
     protected static final int NUM_KEYS = 5;
     protected static final int NUM_EGGS = 5;
     protected static final int MAX_STEPS = 100;
-
     protected int playerX;
     protected int playerY;
     protected boolean[][] keyLocations;
@@ -33,18 +32,15 @@ public class GameEngine implements java.io.Serializable {
     protected Text eggCounterText;
     protected Text scoreText;
     protected SerializableRectangle[][] grid;
-
     protected Image playerImage;
-
     protected int newX;
     protected int newY;
-
     protected String movementCounterTextData;
     protected String scoreTextData;
 
 
 
-
+    // method that controls all user movement inside the 10x10 grid, takes input from arrow keys or arrow buttons in the GUI
     protected void handleArrowButtonPress(String direction) {
         if (gameWon || movementCount >= MAX_STEPS) {
             return;
@@ -66,8 +62,9 @@ public class GameEngine implements java.io.Serializable {
 
         newX = playerX + dx;
         newY = playerY + dy;
-
+        // move validation
         if (isValidMove(newX, newY)) {
+            //collect key and remove specific key from grid
             if (keyLocations[newY][newX]) {
                 keyLocations[newY][newX] = false;
                 collectedKeys++;
@@ -76,6 +73,7 @@ public class GameEngine implements java.io.Serializable {
             }
 
             if (lockedCells[newY][newX] && !openedLocks.contains(newY * MAP_SIZE + newX)) {
+                //collect lock and remove specific lock from grid
                 if (collectedKeys > 0) {
                     collectedKeys--;
                     openedLocks.add(newY * MAP_SIZE + newX);
@@ -87,13 +85,15 @@ public class GameEngine implements java.io.Serializable {
                 }
             }
 
-            if (eggLocations[newY][newX]) {
+            if
+            //collect egg and remove specific egg from grid
+            (eggLocations[newY][newX]) {
                 eggLocations[newY][newX] = false;
                 collectedEggs++;
                 grid[newY][newX].setFill(Color.WHITE);
                 eggCounterText.setText("Egg Count: " + collectedEggs);
             }
-
+            //replace previous tile with blank white space
             grid[playerY][playerX].setFill(Color.WHITE);
             playerX = newX;
             playerY = newY;
@@ -101,9 +101,12 @@ public class GameEngine implements java.io.Serializable {
             // Update the player's position on the grid with the player image
             grid[playerY][playerX].setFill(new ImagePattern(playerImage));
 
+            //track user movement, game over at 100 steps, score displayed at the end. 100 - user steps = score
             movementCount++;
             movementCounterText.setText("Steps Taken: " + movementCount + "/" + MAX_STEPS);
 
+
+            // end of game conditions
             if (playerX == MAP_SIZE - 1 && playerY == 0 && collectedEggs == NUM_EGGS) {
                 gameWon = true;
                 grid[playerY][playerX].setFill(Color.GREEN);
@@ -115,14 +118,8 @@ public class GameEngine implements java.io.Serializable {
         }
     }
 
-
     private boolean isValidMove(int x, int y) {
         return x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE;
     }
 
-
-
-
-
-
-}
+} // end of class

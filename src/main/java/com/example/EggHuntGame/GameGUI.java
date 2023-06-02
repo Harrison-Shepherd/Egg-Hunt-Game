@@ -26,7 +26,7 @@ public class GameGUI extends GameEngine {
         super();
         this.d = d;
     }
-
+    // creates the UI for menu, with play, text and help buttons.
     public static void MenuGUI(Stage stage) {
         VBox root = new VBox();
         root.setSpacing(10);
@@ -51,11 +51,10 @@ public class GameGUI extends GameEngine {
         stage.setScene(scene);
         stage.show(); // Add this line to display the stage with the scene
     }
-
+    // main game GUI
     public void constructGui(Stage primaryStage) {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-padding: 20");
-
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
 
@@ -165,13 +164,11 @@ public class GameGUI extends GameEngine {
         buttonsBox.setAlignment(Pos.CENTER);
         root.setRight(buttonsBox);
 
-
         primaryStage.show();
 
+    } // TODO double check overlapping tiles (eggs keys locks)
 
-
-    }
-
+    // All data saved into "1.save" to be loaded.
     public void saveData (String fileName){
         try {
             GameEngine data = new GameEngine();
@@ -196,11 +193,12 @@ public class GameGUI extends GameEngine {
             data.scoreTextData = scoreText.getText(); // Store the text value
 
             ResourceManager.save(data, fileName);
+        // catch exception thrown in ResourceManager
         } catch (Exception e) {
             System.out.println("Couldn't save: " + e.getMessage());
         }
     }
-
+    // data to be loaded from "1.save"
     public void loadData(String fileName) {
         try {
             GameEngine loadedData = (GameEngine) ResourceManager.load(fileName);
@@ -254,7 +252,9 @@ public class GameGUI extends GameEngine {
             // Set the fill for the player's tile
             grid[playerY][playerX].setFill(new ImagePattern(playerImage));
 
-            refreshGrid();
+            refreshGrid(); // helps fills in images for egg,keys,locks and player
+
+        // catch exception thrown in ResourceManager
         } catch (Exception e) {
             System.out.println("Couldn't load save data: " + e.getMessage());
         }
@@ -317,7 +317,6 @@ public class GameGUI extends GameEngine {
         public void loadGuiForPlay() {
             // Load and display the GUI for playing with the given integer d
             // ...
-            System.out.println("Loading GUI for play with d = " + d);
             GameGUI gameGUI = new GameGUI(d);
             Stage testStage = new Stage();
             gameGUI.constructGui(testStage);
@@ -330,7 +329,6 @@ public class GameGUI extends GameEngine {
                     int value = Integer.parseInt(d);
                     GuiPlayHandler handler = new GuiPlayHandler(value);
                     handler.loadGuiForPlay();
-                    System.out.println(d);
                 } else {
                     InputValidator.showInvalidInputAlert();
                 }
@@ -367,13 +365,11 @@ public class GameGUI extends GameEngine {
     }
 
     static class help {
-
+        // Help button displayed in the Menu
         static void showHelpPopup() {
             Alert helpAlert = new Alert(Alert.AlertType.INFORMATION);
             helpAlert.setTitle("Help");
             helpAlert.setHeaderText("Game instructions!");
-
-
 
             TextArea textArea = new TextArea();
             textArea.setEditable(false);
@@ -406,15 +402,9 @@ public class GameGUI extends GameEngine {
                     tile.setFill(new ImagePattern(lockImage));
                 } else if (eggLocations[y][x]) {
                     tile.setFill(new ImagePattern(eggImage));
-//                } else if (newX == x && newY == y) {
-//                    tile.setFill(new ImagePattern(playerImage));
                 } else {
                     tile.setFill(Color.WHITE);
                 }
-
-
-
-
             }
         }
 
@@ -430,4 +420,4 @@ public class GameGUI extends GameEngine {
 
 
 
-}
+} // end of class
