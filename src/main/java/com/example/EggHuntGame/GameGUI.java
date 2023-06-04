@@ -212,6 +212,8 @@ public class GameGUI extends GameEngine {
             collectedEggs = loadedData.collectedEggs;
             movementCount = loadedData.movementCount;
             gameWon = loadedData.gameWon;
+
+
             // Recreate the Text objects using the stored data
             movementCounterText.setText(loadedData.movementCounterTextData);
             scoreText.setText(loadedData.scoreTextData);

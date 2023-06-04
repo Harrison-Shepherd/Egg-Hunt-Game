@@ -5,11 +5,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.text.Text;
 import java.io.*;
+import java.util.HashSet;
 import java.util.Set;
-
 public class GameEngine implements java.io.Serializable {
 
     // Game Variables
+    public transient Image playerImage; // Declare the field as private and specify its type
     @Serial
     private static final long serialVersionUID = 1L;
     protected static final int TILE_SIZE = 40;
@@ -26,17 +27,18 @@ public class GameEngine implements java.io.Serializable {
     protected Set<Integer> openedLocks;
     protected int collectedKeys;
     protected int collectedEggs;
-    protected int movementCount;
+    protected int movementCount = 0;
     protected Text movementCounterText;
     protected Text keyCounterText;
     protected Text eggCounterText;
     protected Text scoreText;
     protected SerializableRectangle[][] grid;
-    protected Image playerImage;
+//    protected Image playerImage;
     protected int newX;
     protected int newY;
     protected String movementCounterTextData;
     protected String scoreTextData;
+
 
 
 
@@ -103,6 +105,7 @@ public class GameEngine implements java.io.Serializable {
 
             //track user movement, game over at 100 steps, score displayed at the end. 100 - user steps = score
             movementCount++;
+            System.out.println(movementCount);
             movementCounterText.setText("Steps Taken: " + movementCount + "/" + MAX_STEPS);
 
 
@@ -118,8 +121,46 @@ public class GameEngine implements java.io.Serializable {
         }
     }
 
+    public int getScore() {
+        if (gameWon) {
+            return MAX_STEPS - movementCount;
+        } else {
+            return -1; // Return -1 if the game is not won
+        }
+    }
+
+
     protected boolean isValidMove(int x, int y) {
         return x >= 0 && x < MAP_SIZE && y >= 0 && y < MAP_SIZE;
     }
+    private void loadPlayerImage() {
+        try {
+            playerImage = new Image("player_icon.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle the exception or log an error message
+        }
+    }
+    public GameEngine() {
+        // Initialize arrays
+        keyLocations = new boolean[MAP_SIZE][MAP_SIZE];
+        lockedCells = new boolean[MAP_SIZE][MAP_SIZE];
+        eggLocations = new boolean[MAP_SIZE][MAP_SIZE];
+        movementCounterText = new SerializableText();
+        eggCounterText = new SerializableText();
+        openedLocks = new HashSet<>();
+        keyCounterText = new SerializableText();
+        scoreText = new SerializableText();
+        // Initialize the grid
+        grid = new SerializableRectangle[MAP_SIZE][MAP_SIZE];
+        for (int i = 0; i < MAP_SIZE; i++) {
+            for (int j = 0; j < MAP_SIZE; j++) {
+                grid[i][j] = new SerializableRectangle(TILE_SIZE, TILE_SIZE);
+            }
+        }
+        // Load the player image
+        loadPlayerImage();
+    }
+
 
 } // end of class

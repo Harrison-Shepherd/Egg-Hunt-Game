@@ -13,6 +13,7 @@ public class RunGame extends Application {
     public void start(Stage primaryStage) {
         GameGUI.MenuGUI(primaryStage);
         primaryStage.show();
+        //JFXPanel fjxPanel = new JFXPanel();
     }
 
 
